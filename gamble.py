@@ -15,6 +15,7 @@ def clearScreen():
     # Check the operating system
     if os.name == 'posix':  # For Unix/Linux/Mac OS
         os.system('clear')
+    
     elif os.name == 'nt':  # For Windows
         os.system('cls')
 
@@ -26,16 +27,23 @@ def introPrompt():
     print("        Welcome to your imminent demise")
     print(" Please choose one of the given options below:")
     print("                   Bank")
-    print("                  Casino")
+    print("                  Casino\n")
+    print("                   Quit")
     choice = input().lower()
     print("-------------====================-------------------")
-    print(f"[{choice}]")
     time.sleep(1)
+    clearScreen()
 
-    if choice == "bank":
+    if choice in ["bank", "atm"]:
         bankTerminal()
-    elif choice == "casino" or choice == "gamble":
+    
+    elif choice in ["casino", "gamble"]:
         casino()
+    
+    elif choice in ["quit", "exit", "q"]:
+        print("Exiting...")
+        time.sleep(1)
+        exit()
 
 # Main bank program
 def bankTerminal():
@@ -69,137 +77,153 @@ def bankTerminal():
 
     # Banking main menu
     if running:
-        clearScreen()
-        print("----------------==============----------------------")
-        print("      Welcome to unbranded sketchy ATM service.")
-        print("\n           What would you like to do?")
-        print("                    Deposit")
-        print("                    Withdraw")
-        print("                  Check Balance")
-        print("----------------==============----------------------")
+        print("-------------------=====================-------------------------")
+        print("         Welcome to unbranded sketchy ATM service.\n")
+        print("               What would you like to do?")
+        print("                        Deposit")
+        print("                       Withdraw")
+        print("                     Check Balance\n")
+        print("                         Exit")
         choice = input().lower()
+        print("-------------------=====================-------------------------")
 
         # Check if choice is valid
         if choice not in ["withdraw", "with", "deposit", "dep", "balance", "check balance", "bal"]:
-            print("\n----------------==============----------------------")
-            print("    Sorry, your answer is invalid, try again.")
-            print("       Withdraw, Deposit or Check Balance?")
-            print("----------------==============----------------------")
+            print("\n-------------------=====================-------------------------")
+            print("             Sorry, your answer is invalid, try again.")
+            print("                 Withdraw, Deposit or Check Balance?")
             choice = input().lower()
+            print("-------------------=====================-------------------------")
 
         # Check balance of bank account
         if choice == "check balance" or choice == "balance" or choice == "bal":     # Check if choice is check balance
             # Make sure bankAccount is an integer
             try:
                 bankAccount = int(bankAccount)
+            
             except ValueError:
                 try:
                     bankAccount = float(bankAccount)
+                
                 except ValueError:
                     print("System error.")
             # Make sure wallet is an integer
             try:
                 wallet = int(wallet)
+            
             except ValueError:
                 try:
                     wallet = float(wallet)
+                
                 except ValueError:
                     print("System error.")
             # Print current balance                
-            print("\n----------------==============----------------------")
+            print("\n-------------------=====================-------------------------")
             print(f"       Your current account balance is: €{bankAccount:,.2f}")
-            print(f"        And you have €{wallet:,.2f} in your wallet")
-            print("----------------==============----------------------") 
+            print(f"        And you have €{wallet:,.2f} in your wallet") 
             choice = ""
+            print("-------------------=====================-------------------------")
 
         # Deposit from wallet to bank account
         if choice == "deposit" or choice == "dep":     # Check if choice is deposit
-            print("\n----------------==============----------------------")
+            print("\n-------------------=====================-------------------------")
             print("       How much do you wish to deposit?")
-            print("----------------==============----------------------")
             transferFromWallet = input().lower()      # Input amount to deposit
+            print("-------------------=====================-------------------------")
             
             if transferFromWallet == "all" or transferFromWallet == "max":
-                print("\n------------------==================------------------------")
+                print("\n-------------------=====================-------------------------")
                 print(f"         Deposited €{wallet:,.2f} from wallet to bank.")
-                print("------------------==================------------------------")
+                print("-------------------=====================-------------------------")
                 bankAccount += wallet
                 wallet = 0
+            
             else:
-
                 # Check if withdrawn amount is greater than the amount in wallet
                 if transferFromWallet > wallet:       
-                    print("\n------------------====================------------------------")
+                    print("\n-------------------=====================-------------------------")
                     print("   Broke ass bitch, you don't have enough cash to deposit.")
-                    print("------------------====================------------------------") 
+                    print("-------------------=====================-------------------------") 
+                
                 elif transferFromWallet == 0:
                     transfer0()
+                
                 elif transferFromWallet < 0:
                     depositNeg()
+                
                 elif transferFromWallet > 0:
                     try:
                         transferFromWallet = float(transferFromWallet)
-                        print("\n------------------==================------------------------")
+                        print("\n-------------------=====================-------------------------")
                         print(f"         Deposited €{transferFromWallet:,.2f} from wallet to bank.")
-                        print("------------------==================------------------------")
+                        print("-------------------=====================-------------------------")
                         wallet -= transferFromWallet  
                         bankAccount += transferFromWallet
+                    
                     except ValueError:
                         transferFromWallet = int(transferFromWallet)
-                        print("\n------------------==================------------------------")
+                        print("\n-------------------=====================-------------------------")
                         print(f"         Deposited € {transferFromWallet:,.2f} from wallet to bank.")
-                        print("------------------==================------------------------")
+                        print("-------------------=====================-------------------------")
                         wallet -= transferFromWallet    
                         bankAccount += transferFromWallet
 
         # Withdraw from bank account to wallet
         if choice == "withdraw" or choice == "with":    # Check if choice is withdraw
-            print("\n----------------==============----------------------")
+            print("\n-------------------=====================-------------------------")
             print("       How much do you wish to withdraw?")
-            print("----------------==============----------------------")
             transferFromBank = input().lower()          # Input amount to withdraw
+            print("-------------------=====================-------------------------")
 
             if transferFromBank == "all" or transferFromBank == "max":
-                print("\n------------------==================------------------------")
+                print("\n-------------------=====================-------------------------")
                 print(f"         Withdrew €{bankAccount:,.2f} from bank to wallet.")
-                print("------------------==================------------------------")
+                print("-------------------=====================-------------------------")
                 wallet += bankAccount
                 bankAccount = 0
+            
             else:
                 # Check if withdrawn amount is greater than the amount in bank account
                 if transferFromBank > bankAccount:
-                    print("\n------------------====================------------------------")
+                    print("\n-------------------=====================-------------------------")
                     print("   Insufficient funds, your bank account balance is too low.")
-                    print("------------------====================------------------------")
+                    print("-------------------=====================-------------------------")
+                
                 elif transferFromBank == 0:
                     transfer0()
+                
                 elif transferFromBank < 0:
                     withdrawNeg()
+                
                 elif transferFromBank > 0:
                     try:
                         transferFromBank = float(transferFromBank)
                         bankAccount -= transferFromBank  
                         wallet += transferFromBank
-                        print("\n------------------==================------------------------")
-                        print(f"         Withdrew €{transferFromBank:,.2f} from bank to wallet.")
-                        print("------------------==================------------------------")
+                        print("\n-------------------=====================-------------------------")
+                        print(f"       Withdrew €{transferFromBank:,.2f} from bank to wallet.")
+                        print("-------------------=====================-------------------------")
+                    
                     except ValueError:
                         transferFromBank = int(transferFromBank)
                         bankAccount -= transferFromBank    
                         wallet += transferFromBank
-                        print("\n------------------==================------------------------")
-                        print(f"         Withdrew €{transferFromBank:,.2f} from bank to wallet.")
-                        print("------------------==================------------------------")
+                        print("\n-------------------=====================-------------------------")
+                        print(f"       Withdrew €{transferFromBank:,.2f} from bank to wallet.")
+                        print("-------------------=====================-------------------------")
         time.sleep(1)
         print("Do you wish to continue using this Sketchy ATM Machine?")
         print("                        Y/N")
         usingChoice = input().lower()
+        
         if usingChoice == "n" or usingChoice == "no":
             running = False
             time.sleep(0.2)
             introPrompt()
+        
         elif usingChoice == "y" or usingChoice == "yes":
             bankTerminal()
+        
         else:
             print("Invalid choice.")
             time.sleep(0.25)
@@ -208,8 +232,10 @@ def bankTerminal():
 def casino():
     global wallet
     minBet = 50
+    
     def invalidGuess():
         print("\nInvalid guess")
+    
     def invalidEntry():
         print("\nInvalid entry.")
 
@@ -225,45 +251,35 @@ def casino():
         try:
             guess = int(guess)
             if 0 < guess <= riskLevel:
-                print(f"\n"*2 + f"Current bet is €{betAmount:,.2f}")
-                print("--------------------------------")
-                print("Roling...")
-                time.sleep(5)
+                for i in range(4):
+                    clearScreen()
+                    print(f"\n"*2 + f"Current bet is €{betAmount:,.2f}")
+                    print("-------------------------------------")
+                    print("Roling"+"."*i)
+                    time.sleep(1.33)
                 print(f"You guessed the number: {guess}")
                 time.sleep(2)
                 print(f"The rolled number is: {correctNumber}")
                 time.sleep(2)
+                
                 if guess == correctNumber:
                     winnings = betAmount * riskReward
-                    print("\n"*3 + "Congratulations!")
+                    print("\n-------------------=====================-------------------------")
+                    print("Congratulations!")
                     print("You have correctly guessed the number.")
                     print(f"You have won €{winnings:,.2f}")
                     wallet += winnings
-                    print("Would you like to try again?")
-                    print("Y/N")
-                    retry = input().lower()
-                    if retry == "y":
-                        casino()
-                    elif retry == "n":
-                       retryPrompt
-                    else:
-                        invalidEntry()
+                    retryPrompt()
+                
                 else:
-                        print("\n"*3 + "Unlucky!")
+                        print("\n-------------------=====================-------------------------")
+                        print("Unlucky!")
                         print("You did not pick the winning number.")
-                        print("Would you like to try again?")
-                        print("Y/N")
-                        retry = input().lower()
-                        if retry == "y":
-                            casino()
-                        elif retry == "n":
-                            retryPrompt
-                        else:
-                            invalidEntry()
-
+                        retryPrompt()
             else:
                 invalidGuess()
-                gambling()    
+                gambling()  
+
         except ValueError:
             invalidEntry()
             gambling()
@@ -272,21 +288,31 @@ def casino():
         print("Would you like to try again?")
         print("Y/N")
         retry = input().lower()
+        
         if retry == "y":
             casino()
+        
         elif retry == "n":
             mainMenuPrompt()
+        
         else:
             invalidEntry()
 
     def mainMenuPrompt():
+        print("\n-------------------=====================-------------------------")
         print("Okay, would you like to go to main menu?")
         print("Y/N")
         mainMenu = input().lower()
+        print("-------------------=====================-------------------------")
+        
         if mainMenu == "y":
             introPrompt()
+        
         elif mainMenu == "n":
+            print("Exiting...")
+            time.sleep(1)
             exit()
+        
         else:
             invalidEntry()
 
@@ -350,16 +376,20 @@ def casino():
                     print("          Would you like to go to the bank?")
                     print("                         Y/N")
                     returnChoice = input().lower()
+                    
                     if returnChoice == "y":
                         bankTerminal()
+                    
                     elif returnChoice == "n":
                         print("\nWell what now? I guess either lower your bet, or dont gamble.")
                         time.sleep(1)
                         gambleMenu()
+                    
                     else:
                         invalidEntry()
                         time.sleep(1)
                         gambleMenu()
+
                 else:
                     riskMenu(betAmount)
 
@@ -368,8 +398,8 @@ def casino():
                 gambleMenu()
     # Initiating casino
     clearScreen()
-    print("--------------------------================--------------------------")
-    print("                       Welcome to the casino")
+    print("-------------------=====================-------------------------")
+    print("                   Welcome to the casino")
     gambleMenu()
 
 introPrompt() # Initiate intro screen
