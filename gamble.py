@@ -3,7 +3,7 @@ import os
 import time
 import random
 running = True
-bankAccount = float(random.randrange(1000, 10000))
+bankAccount = float(random.randrange(1000, 20000))
 wallet = float(random.randrange(200, 1000))
 usingChoice = ""
 choice = ""
